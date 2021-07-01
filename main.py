@@ -43,6 +43,81 @@ def spaceman():
 
 ########################################################################################################################
 
+
+#################### Домашнее задание ##################################################################################
+
+
+# crud operating for users
+@app.route('/phones/create/')
+def phones_create():
+    query_params = request.args
+    value = query_params.get('value')
+
+    import sqlite3
+
+    con = sqlite3.connect("./phones.db")
+    cur = con.cursor()
+    sql = f"""
+    INSERT INTO phones
+    values (null, '{value}')
+    """
+    cur.execute(sql)
+    con.commit()
+    con.close()
+    return 'Phone Created'
+
+
+@app.route('/phones/delete/')
+def phones_delete():
+    import sqlite3
+
+    con = sqlite3.connect("./phones.db")
+    cur = con.cursor()
+    sql = f"""
+    DELETE FROM phones;
+    """
+    cur.execute(sql)
+    con.commit()
+    con.close()
+    return 'All phones were deleted'
+
+
+@app.route('/phones/list/')
+def phones_list():
+    import sqlite3
+
+    con = sqlite3.connect("./phones.db")
+    cur = con.cursor()
+    sql = f"""
+    SELECT * FROM phones;
+    """
+    cur.execute(sql)
+    phones_list = cur.fetchall()
+    con.close()
+    return f'Users: {phones_list}'
+
+
+@app.route('/phones/update/')
+def phones_update():
+    query_params = request.args
+    value = query_params.get('value')
+
+    import sqlite3
+
+    con = sqlite3.connect("./phones.db")
+    cur = con.cursor()
+    sql = f"""
+    INSERT INTO phones
+    values ('{value}')
+    """
+    cur.execute(sql)
+    con.commit()
+    con.close()
+    return 'Phones Updated'
+
+
+########################################################################################################################
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
@@ -126,9 +201,8 @@ def users_list():
     """
     cur.execute(sql)
     users_list = cur.fetchall()
-    breakpoint()
     con.close()
-    return 'Users'
+    return f'Users: {users_list}'
 
 
 @app.route('/users/update/')
